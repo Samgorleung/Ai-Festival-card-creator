@@ -435,7 +435,11 @@ export const TRANSLATIONS = {
     vertical: 'Vertical',
     horizontal: 'Horizontal',
     square: 'Square',
-    petNotice: 'Friends, family, and pets are all welcome!'
+    petNotice: 'Friends, family, and pets are all welcome!',
+    customBackgroundHeader: 'Custom Background (Optional)',
+    backgroundTextLabel: 'Describe background or theme...',
+    backgroundImageLabel: 'Upload background reference...',
+    clearBackground: 'Clear Custom Background'
   },
   [Language.ZH]: {
     title: 'AI 節日賀卡製作',
@@ -454,6 +458,10 @@ export const TRANSLATIONS = {
     vertical: '直式',
     horizontal: '橫式',
     square: '正方形',
-    petNotice: '歡迎家人、朋友與寵物一同入鏡！'
+    petNotice: '歡迎家人、朋友與寵物一同入鏡！',
+    customBackgroundHeader: '自定義背景 (選填)',
+    backgroundTextLabel: '描述您想要的背景或主題...',
+    backgroundImageLabel: '上傳背景參考圖...',
+    clearBackground: '清除自定義背景'
   }
 };

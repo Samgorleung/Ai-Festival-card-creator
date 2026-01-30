@@ -30,6 +30,8 @@ export interface FestivalStyle {
 
 export interface AppState {
   image: string | null;
+  customBackgroundPrompt: string | null;
+  customBackgroundImage: string | null;
   selectedFestivalId: string | null;
   selectedStyleId: string | null;
   aspectRatio: AspectRatio;

@@ -8,6 +8,8 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit for security and performance
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
     image: null,
+    customBackgroundPrompt: null,
+    customBackgroundImage: null,
     selectedFestivalId: FESTIVALS[0].id,
     selectedStyleId: STYLES[0].id,
     aspectRatio: '3:4',
@@ -18,18 +20,17 @@ const App: React.FC = () => {
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const bgFileInputRef = useRef<HTMLInputElement>(null);
   const currentT = TRANSLATIONS[state.language];
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, isBackground: boolean = false) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Security Check: File Size
       if (file.size > MAX_FILE_SIZE) {
         setState(prev => ({ ...prev, error: state.language === Language.EN ? 'File too large (Max 5MB)' : '檔案過大 (上限 5MB)' }));
         return;
       }
 
-      // Security Check: File Type
       if (!file.type.startsWith('image/')) {
         setState(prev => ({ ...prev, error: state.language === Language.EN ? 'Invalid file type' : '檔案格式不符' }));
         return;
@@ -37,7 +38,11 @@ const App: React.FC = () => {
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setState(prev => ({ ...prev, image: reader.result as string, resultImage: null, error: null }));
+        if (isBackground) {
+          setState(prev => ({ ...prev, customBackgroundImage: reader.result as string, error: null }));
+        } else {
+          setState(prev => ({ ...prev, image: reader.result as string, resultImage: null, error: null }));
+        }
       };
       reader.onerror = () => {
         setState(prev => ({ ...prev, error: 'Failed to read file' }));
@@ -52,12 +57,15 @@ const App: React.FC = () => {
     const style = STYLES.find(s => s.id === state.selectedStyleId);
     if (!festival || !style) return;
 
+    // Use predefined variations only for reliability on non-English characters
     const variations = festival.greetingVariations || [];
     const allGreetings = [
       { en: festival.greetingEn, zh: festival.greetingZh },
       ...variations
     ];
-    const selectedGreeting = allGreetings[Math.floor(Math.random() * allGreetings.length)];
+    const selectedGreetingObj = allGreetings[Math.floor(Math.random() * allGreetings.length)];
+    // We strictly use the English greeting on the image to prevent model glitches
+    const finalGreeting = selectedGreetingObj.en;
 
     setState(prev => ({ ...prev, isGenerating: true, error: null }));
     try {
@@ -65,8 +73,10 @@ const App: React.FC = () => {
         state.image,
         festival.basePrompt,
         style.prompt,
-        selectedGreeting.en,
-        state.aspectRatio
+        finalGreeting,
+        state.aspectRatio,
+        state.customBackgroundPrompt,
+        state.customBackgroundImage
       );
       setState(prev => ({ ...prev, resultImage: result, isGenerating: false }));
     } catch (err) {
@@ -138,7 +148,46 @@ const App: React.FC = () => {
                     <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">{currentT.petNotice}</p>
                   </div>
                 )}
-                <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                <input type="file" ref={fileInputRef} onChange={(e) => handleImageUpload(e, false)} accept="image/*" className="hidden" />
+              </div>
+            </section>
+
+            {/* Optional Custom Background */}
+            <section className="space-y-4 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <div className="flex justify-between items-center">
+                <h2 className="text-slate-700 text-lg font-black italic">{currentT.customBackgroundHeader}</h2>
+                {(state.customBackgroundPrompt || state.customBackgroundImage) && (
+                  <button 
+                    onClick={() => setState(p => ({ ...p, customBackgroundPrompt: null, customBackgroundImage: null }))}
+                    className="text-[10px] font-bold text-red-500 uppercase tracking-wider underline"
+                  >
+                    {currentT.clearBackground}
+                  </button>
+                )}
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <textarea 
+                  value={state.customBackgroundPrompt || ''}
+                  onChange={(e) => setState(p => ({ ...p, customBackgroundPrompt: e.target.value || null }))}
+                  placeholder={currentT.backgroundTextLabel}
+                  className="w-full h-24 p-4 text-sm rounded-xl border-2 border-slate-200 focus:border-red-400 focus:outline-none bg-white transition-all resize-none shadow-sm"
+                />
+                <div 
+                  onClick={() => bgFileInputRef.current?.click()}
+                  className={`relative h-24 rounded-xl border-2 border-dashed flex items-center justify-center cursor-pointer transition-all overflow-hidden bg-white shadow-sm ${
+                    state.customBackgroundImage ? 'border-red-200' : 'border-slate-300 hover:border-red-400'
+                  }`}
+                >
+                  {state.customBackgroundImage ? (
+                    <img src={state.customBackgroundImage} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-xl">🖼️</div>
+                      <p className="text-[10px] font-bold text-slate-400 mt-1">{currentT.backgroundImageLabel}</p>
+                    </div>
+                  )}
+                  <input type="file" ref={bgFileInputRef} onChange={(e) => handleImageUpload(e, true)} accept="image/*" className="hidden" />
+                </div>
               </div>
             </section>
 
@@ -228,7 +277,7 @@ const App: React.FC = () => {
                 {currentT.download}
               </a>
               <button 
-                onClick={() => setState(p => ({ ...p, image: null, resultImage: null }))}
+                onClick={() => setState(p => ({ ...p, image: null, resultImage: null, customBackgroundPrompt: null, customBackgroundImage: null }))}
                 className="flex-1 py-4 bg-white border-2 border-slate-200 text-slate-600 rounded-full font-bold text-lg hover:bg-slate-50 transition-all active:scale-95"
               >
                 {currentT.restart}
