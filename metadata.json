@@ -1,0 +1,7 @@
+{
+  "name": "AI Festive Lens",
+  "description": "Transform your casual selfies into stunning, professional-grade festival greeting cards using Gemini's advanced image editing capabilities. Supports multiple global festivals and both English and Traditional Chinese.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
