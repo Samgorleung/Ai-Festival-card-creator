@@ -5,7 +5,6 @@ export async function generateFestivalCard(
   base64Image: string,
   festivalPrompt: string,
   stylePrompt: string,
-  greeting: string,
   aspectRatio: AspectRatio,
   customBackgroundPrompt?: string | null,
   customBackgroundImage?: string | null
@@ -36,45 +35,26 @@ export async function generateFestivalCard(
     ? `USE THIS SPECIFIC BACKGROUND THEME: ${customBackgroundPrompt}.` 
     : `USE THE FOLLOWING FESTIVAL BACKGROUND: ${festivalPrompt}.`;
 
-  const backgroundImageInstruction = customBackgroundImage 
-    ? `USE THE PROVIDED SECOND IMAGE AS THE PRIMARY VISUAL INSPIRATION FOR THE BACKGROUND ENVIRONMENT AND COMPOSITION.` 
-    : "";
-
   parts.push({
     text: `
-      DESIGN A PREMIUM FESTIVAL GREETING CARD.
+      OBJECTIVE: CREATE A CLEAN ARTISTIC BACKGROUND FOR A GREETING CARD.
       
-      THEME (CULTURAL CONTEXT): ${festivalPrompt}
-      RENDERING STYLE (ARTISTIC MEDIUM): ${stylePrompt}
-      
+      THEME: ${festivalPrompt}
+      ARTISTIC MEDIUM: ${stylePrompt}
       ${backgroundInstruction}
-      ${backgroundImageInstruction}
       
-      MANDATORY TEXT CONTENT TO RENDER:
-      "${greeting}"
+      STRICT NEGATIVE INSTRUCTIONS (CRITICAL):
+      - DO NOT DRAW ANY TEXT, LETTERS, NUMBERS, WORDS, OR CHARACTERS IN THE IMAGE.
+      - THE IMAGE MUST BE A PURE ARTISTIC COMPOSITION.
+      - NO SIGNATURES, NO LOGOS, NO WATERMARKS.
       
-      STRICT INSTRUCTIONS:
-      1. GREETING CARD LAYOUT:
-         - This IS a greeting card. The composition must be intentional, balanced, and artistic.
-         - INTEGRATE FESTIVAL ELEMENTS: The image must clearly reflect the theme (e.g., pumpkins for Halloween, cherry blossoms for Hanami).
+      COMPOSITION RULES:
+      1. PRESERVE FACE: Keep the facial features of the subject from the source photo (Image 1) recognizable.
+      2. FESTIVE ATTIRE: Transform the subject's clothing to match the "${festivalPrompt}" theme in the specified "${stylePrompt}" style.
+      3. ENVIRONMENT: Create a rich, detailed, immersive festive environment.
+      4. STYLE CONSISTENCY: Ensure the entire image adheres to the "${stylePrompt}" artistic medium.
       
-      2. SUBJECT INTEGRITY & ATTIRE: 
-         - Preserve the recognizable facial features of people/pets from the original photo (Image 1). 
-         - **CRITICAL**: Change their clothing to match the THEME (e.g., costumes for Halloween, festive sweaters for Christmas).
-      
-      3. BACKGROUND & PROPS:
-         - Replace the original background with the specified festive scene or custom theme.
-      
-      4. VISUAL STYLE:
-         - Apply the "${stylePrompt}" medium consistently across the whole image.
-      
-      5. TYPOGRAPHY (ENGLISH ONLY):
-         - Render the text "${greeting}" exactly. 
-         - DO NOT add any other languages or Chinese characters to the image as they may glitch.
-         - The text should be a beautiful, integrated part of the design (e.g., elegant calligraphy, neon light, or carved into a prop).
-         - Ensure high contrast and perfect spelling.
-      
-      6. OUTPUT: Cinematic lighting, 8k resolution feel, professional card design.
+      OUTPUT: High-resolution, professional-grade artistic masterpiece without any text labels.
     `,
   });
 

@@ -5,6 +5,7 @@ export enum Language {
 }
 
 export type AspectRatio = '1:1' | '3:4' | '4:3' | '9:16' | '16:9';
+export type TextStyle = 'light' | 'dark' | 'gold' | 'neon';
 
 export interface Festival {
   id: string;
@@ -15,7 +16,7 @@ export interface Festival {
   greetingEn: string;
   greetingZh: string;
   greetingVariations?: { en: string; zh: string }[];
-  basePrompt: string; // Cultural context (attire, background)
+  basePrompt: string;
   icon: string;
 }
 
@@ -23,13 +24,15 @@ export interface FestivalStyle {
   id: string;
   nameEn: string;
   nameZh: string;
-  prompt: string; // Visual medium context
+  prompt: string;
   thumbnailIcon: string;
   category: string;
 }
 
 export interface AppState {
   image: string | null;
+  customGreeting: string | null;
+  textStyle: TextStyle;
   customBackgroundPrompt: string | null;
   customBackgroundImage: string | null;
   selectedFestivalId: string | null;
