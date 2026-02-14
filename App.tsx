@@ -194,7 +194,7 @@ const App: React.FC = () => {
               </section>
             </div>
 
-            {/* Step 2: Festival Selection - Refactored UI */}
+            {/* Step 2: Festival Selection */}
             <section className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <h2 className="text-red-600 text-sm font-black uppercase tracking-widest flex items-center gap-2">

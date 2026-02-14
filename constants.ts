@@ -225,20 +225,12 @@ export const FESTIVALS: Festival[] = [
 
 export const STYLES: FestivalStyle[] = [
   { 
-    id: 'classic', 
-    nameEn: 'Classic', 
-    nameZh: '經典寫實', 
-    thumbnailIcon: '📸', 
-    category: 'Realism', 
-    prompt: 'Professional studio photography style. Realistic textures, cinematic lighting.' 
-  },
-  { 
-    id: 'hollywood', 
-    nameEn: 'Hollywood', 
-    nameZh: '好萊塢電影', 
+    id: 'cinematic', 
+    nameEn: 'Cinematic', 
+    nameZh: '電影寫實', 
     thumbnailIcon: '🎬', 
-    category: 'Cinematic', 
-    prompt: 'Professional cinematic Hollywood film still. High dynamic range, anamorphic lens flares, dramatic rim lighting, moody color grading, shallow depth of field.' 
+    category: 'Realism', 
+    prompt: 'Ultra-high-end cinematic realism. The subject must be seamlessly integrated into the festive environment with matching ambient lighting, realistic shadow casting, and unified color grading. Ensure the subject looks like they are physically part of the scene, not superimposed. High dynamic range, natural skin textures, and professional film-still quality.' 
   },
   { 
     id: 'hk-comic', 
