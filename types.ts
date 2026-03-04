@@ -1,7 +1,11 @@
 
 export enum Language {
   EN = 'EN',
-  ZH = 'ZH'
+  ZH = 'ZH',
+  SC = 'SC',
+  JA = 'JA',
+  KO = 'KO',
+  DE = 'DE'
 }
 
 export type AspectRatio = '1:1' | '3:4' | '4:3' | '9:16' | '16:9';
@@ -11,11 +15,23 @@ export interface Festival {
   id: string;
   nameEn: string;
   nameZh: string;
+  nameSc: string;
+  nameJa: string;
+  nameKo: string;
+  nameDe: string;
   dateEn: string;
   dateZh: string;
+  dateSc: string;
+  dateJa: string;
+  dateKo: string;
+  dateDe: string;
   greetingEn: string;
   greetingZh: string;
-  greetingVariations?: { en: string; zh: string }[];
+  greetingSc: string;
+  greetingJa: string;
+  greetingKo: string;
+  greetingDe: string;
+  greetingVariations?: { en: string; zh: string; sc: string; ja: string; ko: string; de: string }[];
   basePrompt: string;
   icon: string;
 }
@@ -24,6 +40,10 @@ export interface FestivalStyle {
   id: string;
   nameEn: string;
   nameZh: string;
+  nameSc: string;
+  nameJa: string;
+  nameKo: string;
+  nameDe: string;
   prompt: string;
   thumbnailIcon: string;
   category: string;

@@ -28,9 +28,16 @@ const App: React.FC = () => {
   useEffect(() => {
     const festival = FESTIVALS.find(f => f.id === state.selectedFestivalId);
     if (festival) {
+      let greeting = festival.greetingEn;
+      if (state.language === Language.ZH) greeting = festival.greetingZh;
+      else if (state.language === Language.SC) greeting = festival.greetingSc;
+      else if (state.language === Language.JA) greeting = festival.greetingJa;
+      else if (state.language === Language.KO) greeting = festival.greetingKo;
+      else if (state.language === Language.DE) greeting = festival.greetingDe;
+      
       setState(prev => ({ 
         ...prev, 
-        customGreeting: state.language === Language.EN ? festival.greetingEn : festival.greetingZh 
+        customGreeting: greeting 
       }));
     }
   }, [state.selectedFestivalId, state.language]);
@@ -129,12 +136,20 @@ const App: React.FC = () => {
             <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">{currentT.subtitle}</p>
           </div>
         </div>
-        <button 
-          onClick={() => setState(p => ({ ...p, language: p.language === Language.EN ? Language.ZH : Language.EN }))}
-          className="text-xs font-black bg-slate-900 text-white px-5 py-2.5 rounded-full hover:bg-red-600 transition-all uppercase tracking-tighter"
-        >
-          {currentT.switchLang}
-        </button>
+        <div className="flex items-center gap-2">
+          <select 
+            value={state.language}
+            onChange={(e) => setState(p => ({ ...p, language: e.target.value as Language }))}
+            className="text-xs font-black bg-slate-900 text-white px-3 py-2 rounded-xl hover:bg-red-600 transition-all uppercase tracking-tighter outline-none cursor-pointer"
+          >
+            <option value={Language.EN}>English</option>
+            <option value={Language.ZH}>繁體中文</option>
+            <option value={Language.SC}>简体中文</option>
+            <option value={Language.JA}>日本語</option>
+            <option value={Language.KO}>한국어</option>
+            <option value={Language.DE}>Deutsch</option>
+          </select>
+        </div>
       </header>
 
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 md:p-8 space-y-12">
@@ -205,10 +220,20 @@ const App: React.FC = () => {
                   <span className="text-4xl filter drop-shadow-md">{selectedFestival.icon}</span>
                   <div>
                     <h3 className="font-black text-xl text-red-700 leading-none">
-                      {state.language === Language.EN ? selectedFestival.nameEn : selectedFestival.nameZh}
+                      {state.language === Language.EN ? selectedFestival.nameEn : 
+                       state.language === Language.ZH ? selectedFestival.nameZh :
+                       state.language === Language.SC ? selectedFestival.nameSc :
+                       state.language === Language.JA ? selectedFestival.nameJa :
+                       state.language === Language.KO ? selectedFestival.nameKo :
+                       selectedFestival.nameDe}
                     </h3>
                     <p className="text-xs font-bold text-red-400 uppercase tracking-widest mt-1 italic">
-                      {state.language === Language.EN ? selectedFestival.dateEn : selectedFestival.dateZh}
+                      {state.language === Language.EN ? selectedFestival.dateEn : 
+                       state.language === Language.ZH ? selectedFestival.dateZh :
+                       state.language === Language.SC ? selectedFestival.dateSc :
+                       state.language === Language.JA ? selectedFestival.dateJa :
+                       state.language === Language.KO ? selectedFestival.dateKo :
+                       selectedFestival.dateDe}
                     </p>
                   </div>
                 </div>
@@ -226,7 +251,12 @@ const App: React.FC = () => {
                     </div>
                     <div className="text-center">
                       <div className={`font-black text-sm uppercase tracking-tight ${state.selectedFestivalId === f.id ? 'text-red-600' : 'text-slate-500'}`}>
-                        {state.language === Language.EN ? f.nameEn : f.nameZh}
+                        {state.language === Language.EN ? f.nameEn : 
+                         state.language === Language.ZH ? f.nameZh :
+                         state.language === Language.SC ? f.nameSc :
+                         state.language === Language.JA ? f.nameJa :
+                         state.language === Language.KO ? f.nameKo :
+                         f.nameDe}
                       </div>
                     </div>
                   </button>
@@ -249,7 +279,12 @@ const App: React.FC = () => {
                   >
                     <div className="text-4xl mb-3 flex justify-center">{s.thumbnailIcon}</div>
                     <div className="text-xs font-black uppercase tracking-widest text-center">
-                      {state.language === Language.EN ? s.nameEn : s.nameZh}
+                      {state.language === Language.EN ? s.nameEn : 
+                       state.language === Language.ZH ? s.nameZh :
+                       state.language === Language.SC ? s.nameSc :
+                       state.language === Language.JA ? s.nameJa :
+                       state.language === Language.KO ? s.nameKo :
+                       s.nameDe}
                     </div>
                   </button>
                 ))}
