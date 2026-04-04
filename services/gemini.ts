@@ -49,10 +49,12 @@ export async function generateFestivalCard(
       - NO SIGNATURES, NO LOGOS, NO WATERMARKS.
       
       COMPOSITION RULES:
-      1. PRESERVE FACE: Keep the facial features of the subject from the source photo (Image 1) recognizable.
-      2. FESTIVE ATTIRE: Transform the subject's clothing to match the "${festivalPrompt}" theme in the specified "${stylePrompt}" style.
-      3. ENVIRONMENT: Create a rich, detailed, immersive festive environment.
-      4. STYLE CONSISTENCY: Ensure the entire image adheres to the "${stylePrompt}" artistic medium.
+      1. DISTINGUISH MAIN SUBJECTS: Identify the main subjects (people and pets in the foreground, posing, or looking at the camera). You MUST preserve ALL main subjects from the source photo. Do not omit any main family members, friends, or pets.
+      2. REMOVE BACKGROUND BYSTANDERS: Ignore and remove any random people, crowds, or bystanders in the background of the source photo. Replace them with the festive environment.
+      3. PRESERVE FACES: Keep the facial features of all MAIN subjects recognizable.
+      4. FESTIVE ATTIRE: Transform the main subjects' clothing to match the "${festivalPrompt}" theme in the specified "${stylePrompt}" style.
+      5. ENVIRONMENT: Create a rich, detailed, immersive festive environment.
+      6. STYLE CONSISTENCY: Ensure the entire image adheres to the "${stylePrompt}" artistic medium.
       
       OUTPUT: High-resolution, professional-grade artistic masterpiece without any text labels.
     `,

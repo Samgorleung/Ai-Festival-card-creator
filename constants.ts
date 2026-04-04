@@ -565,7 +565,9 @@ export const TRANSLATIONS = {
     customGreetingPlaceholder: 'Type your message...',
     textStyleLabel: 'Typography',
     editMessage: 'Edit Text',
-    saveNotice: 'Blending high-res art and text...'
+    saveNotice: 'Blending high-res art and text...',
+    share: 'Share',
+    shareNotSupported: 'Sharing is not supported on this device.'
   },
   [Language.ZH]: {
     title: 'AI 節日賀卡工坊',
@@ -593,7 +595,9 @@ export const TRANSLATIONS = {
     customGreetingPlaceholder: '輸入您的祝福...',
     textStyleLabel: '文字樣式',
     editMessage: '編輯文字',
-    saveNotice: '正在合成高清圖像與完美文字...'
+    saveNotice: '正在合成高清圖像與完美文字...',
+    share: '分享',
+    shareNotSupported: '此裝置不支援分享功能。'
   },
   [Language.SC]: {
     title: 'AI 节日贺卡工坊',
@@ -621,7 +625,9 @@ export const TRANSLATIONS = {
     customGreetingPlaceholder: '输入您的祝福...',
     textStyleLabel: '文字样式',
     editMessage: '编辑文字',
-    saveNotice: '正在合成高清图像 with 完美文字...'
+    saveNotice: '正在合成高清图像与完美文字...',
+    share: '分享',
+    shareNotSupported: '此设备不支持分享功能。'
   },
   [Language.JA]: {
     title: 'AIフェスティバルスタジオ',
@@ -647,9 +653,11 @@ export const TRANSLATIONS = {
     clearBackground: 'クリア',
     customGreetingHeader: 'メッセージオーバーレイ',
     customGreetingPlaceholder: 'メッセージを入力...',
-    textStyleLabel: 'タイ포그래피',
+    textStyleLabel: 'タイポグラフィ',
     editMessage: 'テキストを編集',
-    saveNotice: '高解像度のアートとテキストをブレンド中...'
+    saveNotice: '高解像度のアートとテキストをブレンド中...',
+    share: '共有',
+    shareNotSupported: 'このデバイスでは共有がサポートされていません。'
   },
   [Language.KO]: {
     title: 'AI 페스티벌 스튜디오',
@@ -677,7 +685,9 @@ export const TRANSLATIONS = {
     customGreetingPlaceholder: '메시지를 입력하세요...',
     textStyleLabel: '타이포그래피',
     editMessage: '텍스트 편집',
-    saveNotice: '고해상도 아트와 텍스트 혼합 중...'
+    saveNotice: '고해상도 아트와 텍스트 혼합 중...',
+    share: '공유',
+    shareNotSupported: '이 기기에서는 공유가 지원되지 않습니다.'
   },
   [Language.DE]: {
     title: 'AI Festival Studio',
@@ -705,6 +715,8 @@ export const TRANSLATIONS = {
     customGreetingPlaceholder: 'Nachricht eingeben...',
     textStyleLabel: 'Typografie',
     editMessage: 'Text bearbeiten',
-    saveNotice: 'Mische hochauflösende Kunst und Text...'
+    saveNotice: 'Mische hochauflösende Kunst und Text...',
+    share: 'Teilen',
+    shareNotSupported: 'Teilen wird auf diesem Gerät nicht unterstützt.'
   }
 };

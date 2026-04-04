@@ -75,8 +75,8 @@ const App: React.FC = () => {
     }
   };
 
-  const saveMasterpiece = async () => {
-    if (!state.resultImage || !cardRef.current) return;
+  const generateCanvas = async (): Promise<HTMLCanvasElement | null> => {
+    if (!state.resultImage || !cardRef.current) return null;
     
     const canvas = document.createElement('canvas');
     const img = new Image();
@@ -87,7 +87,7 @@ const App: React.FC = () => {
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) return null;
 
     ctx.drawImage(img, 0, 0);
 
@@ -113,10 +113,40 @@ const App: React.FC = () => {
       ctx.fillText(line, canvas.width / 2, startY + (i * fontSize * 1.2));
     });
 
+    return canvas;
+  };
+
+  const saveMasterpiece = async () => {
+    const canvas = await generateCanvas();
+    if (!canvas) return;
     const link = document.createElement('a');
     link.download = `Festival_Card_${Date.now()}.png`;
     link.href = canvas.toDataURL('image/png');
     link.click();
+  };
+
+  const shareMasterpiece = async () => {
+    const canvas = await generateCanvas();
+    if (!canvas) return;
+    
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      const file = new File([blob], `Festival_Card_${Date.now()}.png`, { type: 'image/png' });
+      
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            title: currentT.title,
+            text: state.customGreeting || '',
+            files: [file]
+          });
+        } catch (err) {
+          console.error('Share failed:', err);
+        }
+      } else {
+        setState(p => ({ ...p, error: (currentT as any).shareNotSupported || 'Sharing not supported on this device.' }));
+      }
+    }, 'image/png');
   };
 
   const textStyleClasses: Record<TextStyle, string> = {
@@ -341,16 +371,22 @@ const App: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button 
                   onClick={saveMasterpiece}
-                  className="py-5 bg-red-600 text-white rounded-full font-black text-lg hover:bg-slate-900 transition-all shadow-xl hover:shadow-red-500/20 active:scale-95"
+                  className="flex-1 py-4 bg-red-600 text-white rounded-full font-black text-lg hover:bg-slate-900 transition-all shadow-xl hover:shadow-red-500/20 active:scale-95"
                 >
                   {currentT.download}
                 </button>
                 <button 
+                  onClick={shareMasterpiece}
+                  className="flex-1 py-4 bg-indigo-600 text-white rounded-full font-black text-lg hover:bg-slate-900 transition-all shadow-xl hover:shadow-indigo-500/20 active:scale-95"
+                >
+                  {(currentT as any).share || 'Share'}
+                </button>
+                <button 
                   onClick={() => setState(p => ({ ...p, resultImage: null }))}
-                  className="py-5 bg-white border-2 border-slate-200 text-slate-600 rounded-full font-black text-lg hover:bg-slate-50 transition-all active:scale-95"
+                  className="flex-1 py-4 bg-white border-2 border-slate-200 text-slate-600 rounded-full font-black text-lg hover:bg-slate-50 transition-all active:scale-95"
                 >
                   {currentT.restart}
                 </button>
