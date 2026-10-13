@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidFestivalCard(data) {
+      return data.keys().hasAll([
+        'id', 'timestamp', 'festivalId', 'festivalName', 'greeting', 'textStyle', 'aspectRatio', 'composedImage'
+      ]) &&
+      data.keys().hasOnly([
+        'id', 'timestamp', 'festivalId', 'festivalName', 'festivalIcon', 'styleId', 'styleName',
+        'greeting', 'textStyle', 'aspectRatio', 'composedImage', 'rawImage', 'resolution',
+        'ownerId', 'isPublic', 'createdAt'
+      ]) &&
+      data.id is string && isValidId(data.id) &&
+      data.timestamp is number &&
+      data.festivalId is string && data.festivalId.size() <= 64 &&
+      data.festivalName is string && data.festivalName.size() <= 128 &&
+      (!('festivalIcon' in data) || (data.festivalIcon is string && data.festivalIcon.size() <= 16)) &&
+      (!('styleId' in data) || (data.styleId is string && data.styleId.size() <= 64)) &&
+      (!('styleName' in data) || (data.styleName is string && data.styleName.size() <= 128)) &&
+      data.greeting is string && data.greeting.size() <= 500 &&
+      data.textStyle in ['light', 'dark', 'gold', 'neon'] &&
+      data.aspectRatio in ['1:1', '3:4', '4:3', '9:16', '16:9'] &&
+      data.composedImage is string && data.composedImage.size() <= 800000 &&
+      (!('rawImage' in data) || (data.rawImage is string && data.rawImage.size() <= 800000)) &&
+      (!('resolution' in data) || (data.resolution in ['1K', '2K', '4K'])) &&
+      (!('ownerId' in data) || (data.ownerId is string && data.ownerId.size() <= 128)) &&
+      (!('isPublic' in data) || (data.isPublic is bool)) &&
+      (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64));
+    }
+
+    match /cards/{cardId} {
+      // Allow reading festival cards for public cloud gallery and shared links
+      allow get, list: if true;
+
+      // Allow creating cards with schema validation
+      allow create: if isValidId(cardId) &&
+        cardId == incoming().id &&
+        isValidFestivalCard(incoming()) &&
+        (!('ownerId' in incoming()) || !isSignedIn() || incoming().ownerId == request.auth.uid);
+
+      // Allow updating specific mutable fields (greeting, textStyle, composedImage)
+      allow update: if isValidId(cardId) &&
+        isValidFestivalCard(incoming()) &&
+        incoming().id == existing().id &&
+        incoming().timestamp == existing().timestamp &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['greeting', 'textStyle', 'composedImage']);
+
+      // Allow deleting card if author or creator or unowned card
+      allow delete: if isValidId(cardId) &&
+        (!('ownerId' in existing()) || (isSignedIn() && existing().ownerId == request.auth.uid));
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { AspectRatio } from "../types";
+import { AspectRatio, ImageResolution } from "../types";
 
 export async function generateFestivalCard(
   base64Image: string,
@@ -7,9 +7,18 @@ export async function generateFestivalCard(
   stylePrompt: string,
   aspectRatio: AspectRatio,
   customBackgroundPrompt?: string | null,
-  customBackgroundImage?: string | null
+  customBackgroundImage?: string | null,
+  imageResolution: ImageResolution = '2K'
 ): Promise<string> {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
+  const ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      }
+    }
+  });
   const cleanBase64 = base64Image.split(',')[1] || base64Image;
 
   const parts: any[] = [
@@ -37,7 +46,7 @@ export async function generateFestivalCard(
 
   parts.push({
     text: `
-      OBJECTIVE: REDRAW AND TRANSLATE THE SOURCE PHOTO INTO A STYLIZED FESTIVAL GREETING CARD.
+      OBJECTIVE: REDRAW AND TRANSLATE THE SOURCE PHOTO INTO A STYLIZED FESTIVAL GREETING CARD USING NANO BANANA 2.1 HIGH-FIDELITY RENDERING.
       
       THEME: ${festivalPrompt}
       ARTISTIC STYLE / MEDIUM: ${stylePrompt}
@@ -67,16 +76,17 @@ export async function generateFestivalCard(
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3.1-flash-image',
+      model: 'gemini-nano-banana-2.1',
       contents: { parts },
       config: {
         imageConfig: {
           aspectRatio: aspectRatio,
+          imageSize: imageResolution,
         }
       }
     });
 
-    if (!response.candidates?.[0]?.content?.parts) throw new Error('No content');
+    if (!response.candidates?.[0]?.content?.parts) throw new Error('No content returned from model');
     
     for (const part of response.candidates[0].content.parts) {
       if (part.inlineData) {

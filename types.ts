@@ -10,6 +10,7 @@ export enum Language {
 
 export type AspectRatio = '1:1' | '3:4' | '4:3' | '9:16' | '16:9';
 export type TextStyle = 'light' | 'dark' | 'gold' | 'neon';
+export type ImageResolution = '1K' | '2K' | '4K';
 
 export interface Festival {
   id: string;
@@ -34,6 +35,7 @@ export interface Festival {
   greetingVariations?: { en: string; zh: string; sc: string; ja: string; ko: string; de: string }[];
   basePrompt: string;
   icon: string;
+  category?: 'eastern' | 'western' | 'lifestyle';
 }
 
 export interface FestivalStyle {
@@ -58,8 +60,28 @@ export interface AppState {
   selectedFestivalId: string | null;
   selectedStyleId: string | null;
   aspectRatio: AspectRatio;
+  resolution: ImageResolution;
   language: Language;
   isGenerating: boolean;
   resultImage: string | null;
   error: string | null;
+}
+
+export interface GalleryItem {
+  id: string;
+  timestamp: number;
+  composedImage: string;
+  rawImage?: string;
+  festivalId: string;
+  festivalName: string;
+  festivalIcon?: string;
+  styleId?: string;
+  styleName?: string;
+  greeting: string;
+  textStyle: TextStyle;
+  aspectRatio: AspectRatio;
+  resolution?: ImageResolution;
+  ownerId?: string;
+  isPublic?: boolean;
+  createdAt?: string;
 }
