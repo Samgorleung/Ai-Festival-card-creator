@@ -84,4 +84,5 @@ export interface GalleryItem {
   ownerId?: string;
   isPublic?: boolean;
   createdAt?: string;
+  isFavorite?: boolean;
 }

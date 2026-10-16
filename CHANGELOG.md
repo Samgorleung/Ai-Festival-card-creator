@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.0] - 2026-10-16
+
+### Added
+- **Card Favorites & Heart System (`components/GallerySection.tsx`)**:
+  - Interactive heart / favorite button on each gallery card thumbnail (`❤️` / `🤍`) with instant toggle feedback and persistent local storage sync.
+  - Full-screen Lightbox Preview modal updated with dedicated favorite button for quick toggling during high-res inspection.
+- **Favorites View Filter Toggle (`components/GallerySection.tsx`, `constants.ts`)**:
+  - Segmented view control in the gallery header: **All Cards** vs **Favorites** with live count badges.
+  - Dedicated empty state for Favorites view prompting users to tap heart icons to bookmark cards, with a quick 1-click button to return to all cards.
+  - Multilingual translations added for favorites controls in English, Traditional Chinese, Simplified Chinese, Japanese, Korean, and German.
+
+---
+
 ## [1.6.1] - 2026-10-13
 
 ### Security & Hardening

@@ -11,6 +11,8 @@ interface GallerySectionProps {
   language: Language;
 }
 
+const FAVORITES_STORAGE_KEY = 'festive_lens_favorites_v1';
+
 export const GallerySection: React.FC<GallerySectionProps> = ({
   items,
   onRevisit,
@@ -21,8 +23,37 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
   const [selectedPreviewItem, setSelectedPreviewItem] = useState<GalleryItem | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [filterTab, setFilterTab] = useState<'all' | 'favorites'>('all');
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(FAVORITES_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const t = (TRANSLATIONS[language] as any) || TRANSLATIONS[Language.EN];
+
+  const isFavorite = (id: string): boolean => favoriteIds.includes(id);
+
+  const toggleFavorite = (id: string) => {
+    setFavoriteIds(prev => {
+      const next = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
+      try {
+        localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(next));
+      } catch {
+        // Ignore quota/storage errors
+      }
+      return next;
+    });
+  };
+
+  const favoriteCount = items.filter(it => favoriteIds.includes(it.id)).length;
+  const displayedItems = filterTab === 'favorites'
+    ? items.filter(it => favoriteIds.includes(it.id))
+    : items;
 
   const handleDownload = (e: React.MouseEvent, item: GalleryItem) => {
     e.stopPropagation();
@@ -82,8 +113,44 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
           </p>
         </div>
 
-        {items.length > 0 && (
-          <div className="flex items-center gap-2">
+        {/* View Toggle & Actions */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Favorites / All Toggle */}
+          <div className="bg-slate-100 p-1 rounded-2xl flex items-center border border-slate-200/60 shadow-xs">
+            <button
+              type="button"
+              onClick={() => setFilterTab('all')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                filterTab === 'all'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              <span>🖼️</span>
+              <span>{t.allCards || 'All Cards'}</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${filterTab === 'all' ? 'bg-slate-100 text-slate-700' : 'bg-slate-200/70 text-slate-500'}`}>
+                {items.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFilterTab('favorites')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+                filterTab === 'favorites'
+                  ? 'bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-rose-600'
+              }`}
+            >
+              <span>❤️</span>
+              <span>{t.favorites || 'Favorites'}</span>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${filterTab === 'favorites' ? 'bg-white/25 text-white' : 'bg-slate-200/70 text-slate-500'}`}>
+                {favoriteCount}
+              </span>
+            </button>
+          </div>
+
+          {items.length > 0 && (
             <button
               onClick={() => setShowClearConfirm(true)}
               className="text-xs font-bold text-slate-400 hover:text-red-600 transition-colors px-3 py-1.5 rounded-xl hover:bg-red-50 flex items-center gap-1.5 cursor-pointer"
@@ -92,8 +159,8 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
               <span>🗑️</span>
               <span>{t.clearGallery || 'Clear Gallery'}</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Clear Confirmation Modal */}
@@ -107,7 +174,7 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
               {t.clearGallery || 'Clear Gallery'}
             </h3>
             <p className="text-xs text-slate-500 font-medium">
-              {t.clearGalleryConfirm || 'Clear all 5 saved cards from your browser storage?'}
+              {t.clearGalleryConfirm || 'Clear all saved cards from your storage?'}
             </p>
             <div className="flex gap-2 pt-2">
               <button
@@ -143,108 +210,154 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
             Whenever you create a new festival card with live selfies, AI art styles, and custom greetings, it will be automatically saved here for quick revisits and re-downloads.
           </p>
         </div>
+      ) : filterTab === 'favorites' && displayedItems.length === 0 ? (
+        <div className="p-10 md:p-14 bg-gradient-to-b from-rose-50/40 via-white to-slate-50/50 rounded-3xl border border-dashed border-rose-200 text-center space-y-3 animate-in fade-in duration-300">
+          <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-inner">
+            ❤️
+          </div>
+          <h3 className="font-black text-base md:text-lg text-slate-800">
+            {t.noFavoritesYet || 'No favorite cards saved yet.'}
+          </h3>
+          <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+            {t.noFavoritesDesc || 'Click the heart icon on any card in the gallery to mark it as a favorite!'}
+          </p>
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={() => setFilterTab('all')}
+              className="px-4 py-2 bg-slate-900 hover:bg-rose-600 text-white text-xs font-black rounded-xl transition-all cursor-pointer shadow-sm inline-flex items-center gap-1.5"
+            >
+              <span>🖼️</span>
+              <span>{t.showAllCards || 'View All Cards'}</span>
+            </button>
+          </div>
+        </div>
       ) : (
         /* Cards Grid */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {items.map((item, idx) => (
-            <div
-              key={item.id}
-              className="group relative bg-white rounded-3xl border border-slate-200/80 shadow-md shadow-slate-200/40 hover:shadow-xl hover:border-red-300 transition-all overflow-hidden flex flex-col"
-            >
-              {/* Order Badge */}
-              <div className="absolute top-3 left-3 z-10 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-md flex items-center gap-1">
-                <span>#{idx + 1}</span>
-                <span className="opacity-60">•</span>
-                <span>{item.aspectRatio}</span>
-              </div>
-
-              {/* Delete Button */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDelete(item.id);
-                }}
-                className="absolute top-3 right-3 z-10 w-7 h-7 bg-white/80 backdrop-blur-md hover:bg-red-600 hover:text-white text-slate-500 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all shadow-md cursor-pointer"
-                title={t.deleteCard || 'Delete'}
-              >
-                ✕
-              </button>
-
-              {/* Card Image Thumbnail */}
+          {displayedItems.map((item, idx) => {
+            const favorited = isFavorite(item.id);
+            return (
               <div
-                onClick={() => setSelectedPreviewItem(item)}
-                className="relative bg-slate-100 aspect-[3/4] overflow-hidden cursor-pointer"
+                key={item.id}
+                className={`group relative bg-white rounded-3xl border transition-all overflow-hidden flex flex-col ${
+                  favorited
+                    ? 'border-rose-300 shadow-md shadow-rose-100 hover:shadow-xl hover:border-rose-400'
+                    : 'border-slate-200/80 shadow-md shadow-slate-200/40 hover:shadow-xl hover:border-red-300'
+                }`}
               >
-                <img
-                  src={item.composedImage || item.rawImage}
-                  alt={item.festivalName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
+                {/* Order Badge */}
+                <div className="absolute top-3 left-3 z-10 bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-md flex items-center gap-1">
+                  <span>#{idx + 1}</span>
+                  <span className="opacity-60">•</span>
+                  <span>{item.aspectRatio}</span>
+                </div>
 
-                {/* Hover Quick Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end gap-2">
-                  <div className="text-white text-center pb-1">
-                    <p className="text-[11px] font-black leading-tight line-clamp-2 drop-shadow-md">
+                {/* Top Action Buttons (Favorite Heart + Delete) */}
+                <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(item.id);
+                    }}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-all shadow-md cursor-pointer active:scale-90 ${
+                      favorited
+                        ? 'bg-rose-500 text-white scale-105 hover:bg-rose-600 shadow-rose-300'
+                        : 'bg-white/85 backdrop-blur-md text-slate-400 hover:text-rose-500 hover:bg-white sm:opacity-80 sm:group-hover:opacity-100'
+                    }`}
+                    title={favorited ? (t.favoriteRemoved || 'Remove from favorites') : (t.favoriteAdded || 'Add to favorites')}
+                  >
+                    <span>{favorited ? '❤️' : '🤍'}</span>
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(item.id);
+                    }}
+                    className="w-7 h-7 bg-white/80 backdrop-blur-md hover:bg-red-600 hover:text-white text-slate-500 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-all shadow-md cursor-pointer"
+                    title={t.deleteCard || 'Delete'}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Card Image Thumbnail */}
+                <div
+                  onClick={() => setSelectedPreviewItem(item)}
+                  className="relative bg-slate-100 aspect-[3/4] overflow-hidden cursor-pointer"
+                >
+                  <img
+                    src={item.composedImage || item.rawImage}
+                    alt={item.festivalName}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+
+                  {/* Hover Quick Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end gap-2">
+                    <div className="text-white text-center pb-1">
+                      <p className="text-[11px] font-black leading-tight line-clamp-2 drop-shadow-md">
+                        "{item.greeting}"
+                      </p>
+                    </div>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRevisit(item);
+                        }}
+                        className="flex-1 py-2 bg-red-600 hover:bg-white hover:text-slate-900 text-white rounded-xl text-[10px] font-black tracking-tight transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
+                        title="Open in editor"
+                      >
+                        <span>🔄</span>
+                        <span>{t.revisit || 'Revisit'}</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleDownload(e, item)}
+                        className="flex-1 py-2 bg-white/90 hover:bg-white text-slate-900 rounded-xl text-[10px] font-black tracking-tight transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
+                        title="Download image"
+                      >
+                        <span>{downloadingId === item.id ? '✓' : '📥'}</span>
+                        <span>{downloadingId === item.id ? (t.downloadSuccess || 'Saved!') : (t.redownload || 'Save')}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Meta Footer */}
+                <div className="p-3.5 space-y-1.5 bg-white flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between text-xs font-black text-slate-800">
+                      <span className="flex items-center gap-1.5 truncate">
+                        <span>{item.festivalIcon || '🎉'}</span>
+                        <span className="truncate">{item.festivalName}</span>
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-400 shrink-0">
+                        {formatTimestamp(item.timestamp)}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium truncate italic mt-0.5">
                       "{item.greeting}"
                     </p>
                   </div>
-                  <div className="flex gap-1.5">
+
+                  <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400 font-bold border-t border-slate-50">
+                    <span className="uppercase tracking-wider">
+                      {item.styleName ? `Style: ${item.styleName}` : `Text: ${item.textStyle}`}
+                    </span>
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRevisit(item);
-                      }}
-                      className="flex-1 py-2 bg-red-600 hover:bg-white hover:text-slate-900 text-white rounded-xl text-[10px] font-black tracking-tight transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
-                      title="Open in editor"
+                      onClick={() => setSelectedPreviewItem(item)}
+                      className="text-red-600 hover:text-red-700 font-black cursor-pointer flex items-center gap-0.5"
                     >
-                      <span>🔄</span>
-                      <span>{t.revisit || 'Revisit'}</span>
-                    </button>
-                    <button
-                      onClick={(e) => handleDownload(e, item)}
-                      className="flex-1 py-2 bg-white/90 hover:bg-white text-slate-900 rounded-xl text-[10px] font-black tracking-tight transition-all shadow-md cursor-pointer flex items-center justify-center gap-1"
-                      title="Download image"
-                    >
-                      <span>{downloadingId === item.id ? '✓' : '📥'}</span>
-                      <span>{downloadingId === item.id ? (t.downloadSuccess || 'Saved!') : (t.redownload || 'Save')}</span>
+                      <span>🔍</span>
+                      <span>{t.previewCard || 'Preview'}</span>
                     </button>
                   </div>
                 </div>
               </div>
-
-              {/* Card Meta Footer */}
-              <div className="p-3.5 space-y-1.5 bg-white flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between text-xs font-black text-slate-800">
-                    <span className="flex items-center gap-1.5 truncate">
-                      <span>{item.festivalIcon || '🎉'}</span>
-                      <span className="truncate">{item.festivalName}</span>
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-400 shrink-0">
-                      {formatTimestamp(item.timestamp)}
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-500 font-medium truncate italic mt-0.5">
-                    "{item.greeting}"
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between pt-1 text-[10px] text-slate-400 font-bold border-t border-slate-50">
-                  <span className="uppercase tracking-wider">
-                    {item.styleName ? `Style: ${item.styleName}` : `Text: ${item.textStyle}`}
-                  </span>
-                  <button
-                    onClick={() => setSelectedPreviewItem(item)}
-                    className="text-red-600 hover:text-red-700 font-black cursor-pointer flex items-center gap-0.5"
-                  >
-                    <span>🔍</span>
-                    <span>{t.previewCard || 'Preview'}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -270,12 +383,27 @@ export const GallerySection: React.FC<GallerySectionProps> = ({
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedPreviewItem(null)}
-                className="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-black flex items-center justify-center transition-all cursor-pointer"
-              >
-                ✕
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(selectedPreviewItem.id)}
+                  className={`px-3 py-2 rounded-2xl font-black text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95 ${
+                    isFavorite(selectedPreviewItem.id)
+                      ? 'bg-rose-50 text-rose-600 border border-rose-200'
+                      : 'bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600'
+                  }`}
+                  title={isFavorite(selectedPreviewItem.id) ? (t.favoriteRemoved || 'Remove from favorites') : (t.favoriteAdded || 'Add to favorites')}
+                >
+                  <span>{isFavorite(selectedPreviewItem.id) ? '❤️' : '🤍'}</span>
+                  <span>{isFavorite(selectedPreviewItem.id) ? (t.favorites || 'Favorite') : (t.favorites || 'Favorite')}</span>
+                </button>
+                <button
+                  onClick={() => setSelectedPreviewItem(null)}
+                  className="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-black flex items-center justify-center transition-all cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             {/* High-Res Image View */}

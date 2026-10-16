@@ -78,6 +78,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         desc: 'Switch the language at any time in the top-right menu to get native greetings in English, Chinese, Japanese, Korean, or German.'
       },
       {
+        icon: '❤️',
+        title: 'Favorites & Quick Filter',
+        desc: 'Tap the ❤️ heart icon on any card in the Masterpiece Gallery to save it to your Favorites, and use the toggle switch to view your bookmarked creations anytime!'
+      },
+      {
         icon: '🛡️',
         title: 'Privacy Best Practice',
         desc: 'When creating photo birthday cards, use nicknames or universal blessings instead of real full names to protect your personal privacy.'
@@ -134,6 +139,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         desc: '右上角隨時切換語言，自動提供繁中、簡中、英文、日文、韓文與德文的應節祝詞。'
       },
       {
+        icon: '❤️',
+        title: '收藏與分類檢視',
+        desc: '在作品圖庫中點擊卡片右上角的 ❤️ 愛心圖示即可加入「我的最愛」，並可透過上方分類標籤隨時篩選查看收藏作品！'
+      },
+      {
         icon: '🛡️',
         title: '相片賀卡私隱提醒',
         desc: '製作相片生日卡時，強烈建議使用通用暱稱或祝福語，切勿輸入真實全名以防私隱洩漏。'
@@ -188,6 +198,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: '多语言智能切换',
         desc: '右上角随时切换语言，自动提供繁中、简中、英文、日文、韩文与德文的应节祝词。'
+      },
+      {
+        icon: '❤️',
+        title: '收藏与分类查看',
+        desc: '在作品图库中点击卡片右上角的 ❤️ 爱心图标即可加入“我的收藏”，并可通过上方分类标签随时筛选查看收藏作品！'
       }
     ]
   },
@@ -239,6 +254,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: '多言語対応',
         desc: '右上からいつでも言語を変更でき、各国語のメッセージに対応します。'
+      },
+      {
+        icon: '❤️',
+        title: 'お気に入り保存と絞り込み',
+        desc: 'ギャラリー内の各カードにある ❤️ ハートアイコンをタップしてお気に入りに登録し、上部の切り替えタブでいつでも閲覧できます。'
       }
     ]
   },
@@ -290,6 +310,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: '다국어 지원',
         desc: '우측 상단 메뉴에서 언어를 전환해 다양한 축하 문구를 이용하세요.'
+      },
+      {
+        icon: '❤️',
+        title: '즐겨찾기 저장 및 필터',
+        desc: '갤러리의 각 카드에 있는 ❤️ 하트 아이콘을 눌러 즐겨찾기에 추가하고, 상단 토글로 저장된 작품만 빠르게 모아보세요.'
       }
     ]
   },
@@ -341,6 +366,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: 'Mehrsprachig',
         desc: 'Wechseln Sie oben rechts jederzeit die Sprache für passende Grüße in 6 Sprachen.'
+      },
+      {
+        icon: '❤️',
+        title: 'Favoriten & Schnellzugriff',
+        desc: 'Klicken Sie auf das ❤️ Herz-Symbol auf einer Karte, um sie zu Ihren Favoriten hinzuzufügen und über den Umschalter gezielt anzuzeigen.'
       }
     ]
   }
@@ -348,9 +378,20 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
 
 const CHANGELOG_ENTRIES = [
   {
+    version: 'v1.7.0',
+    date: '2026-10-16',
+    badge: 'Latest',
+    items: [
+      'Card Favorites & Heart System: Interactive ❤️ heart button on each card thumbnail and within the full-screen preview lightbox.',
+      'Favorites View Filter: Clean segmented toggle between "All Cards" and "Favorites" with real-time count badges and bookmark empty state.',
+      'Local Storage Persistence: Favorites automatically sync across browser sessions and reloads via local storage.',
+      'Multilingual Localization: Native translations for all favorite controls across English, Traditional Chinese, Simplified Chinese, Japanese, Korean, and German.'
+    ]
+  },
+  {
     version: 'v1.6.1',
     date: '2026-10-13',
-    badge: 'Latest',
+    badge: 'Security',
     items: [
       'Credential Security & Git Protection: Added firebase-applet-config.json to .gitignore and provided clean firebase-applet-config.example.json template without exposed keys.',
       'Decoupled Gemini & Firebase Architecture: Gemini API key strictly isolated to server/environment variables (GEMINI_API_KEY) in AI Studio Secrets, completely separate from Firebase public web client parameters.',
@@ -361,12 +402,11 @@ const CHANGELOG_ENTRIES = [
   {
     version: 'v1.6.0',
     date: '2026-10-13',
-    badge: 'Birthday AI',
+    badge: 'Birthday',
     items: [
       'AI Birthday Card Studio: Added Birthday Celebration under festival categories with celebratory balloons, cakes, confetti, and ambient bokeh.',
-      'Photo-Aware Greeting Assistant (Gemini 3.8 Flash): Multimodal AI analyzes photo subjects (couples, family, elders, friends, pets) to recommend tailored, heartfelt greetings.',
-      'Automated Privacy Safeguards (Anti-Name Leak): Built-in real-time name detection warns users against entering full personal names alongside personal photos to safeguard privacy.',
-      '1-Tap Preset Application: Instantly apply AI recommended greeting presets with interactive pills and real-time canvas preview.'
+      'Birthday Artistic Transformations: Generates bespoke festive party atmospheres while fully preserving face identity and expressions.',
+      'Privacy Best Practice Hinting: Added user guide recommendations against inputting full personal names alongside personal photos.'
     ]
   },
   {
@@ -555,7 +595,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({
                       : 'text-slate-500 hover:text-slate-900 bg-white border border-slate-200'
                   }`}
                 >
-                  {loc.tabChangelog} (v1.2.0)
+                  {loc.tabChangelog} ({CHANGELOG_ENTRIES[0].version})
                 </button>
               </div>
             </div>

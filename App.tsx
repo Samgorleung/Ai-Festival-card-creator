@@ -1002,7 +1002,7 @@ const App: React.FC = () => {
       <footer className="py-16 text-center">
         <div className="w-12 h-1 bg-slate-100 mx-auto mb-6 rounded-full"></div>
         <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.25em] opacity-80 flex items-center justify-center gap-2">
-          <span>AI Festival Studio v1.6.1 (Security Hardened)</span>
+          <span>AI Festival Studio v1.7.0 (Favorites & Gallery)</span>
           <span>•</span>
           <button
             onClick={() => setIsGuideOpen(true)}
