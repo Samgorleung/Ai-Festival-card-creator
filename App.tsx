@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Language, AppState, AspectRatio, TextStyle, ImageResolution, GalleryItem } from './types';
 import { STYLES, FESTIVALS, TRANSLATIONS, FESTIVAL_CATEGORIES } from './constants';
-import { generateFestivalCard } from './services/gemini';
+import {
+  generateFestivalCard
+} from './services/gemini';
 import { CameraModal } from './components/CameraModal';
 import { UserGuideModal } from './components/UserGuideModal';
 import { GallerySection } from './components/GallerySection';
@@ -642,6 +644,7 @@ const App: React.FC = () => {
                   <span className="w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs italic">2</span>
                   {currentT.customGreetingHeader}
                 </h2>
+
                 <div className="p-6 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 space-y-4">
                   <textarea 
                     value={state.customGreeting || ''}
@@ -649,12 +652,13 @@ const App: React.FC = () => {
                     className="w-full p-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-red-400 focus:bg-white focus:outline-none h-32 resize-none font-bold text-lg text-slate-800 transition-all"
                     placeholder={currentT.customGreetingPlaceholder}
                   />
+
                   <div className="flex flex-wrap gap-2">
                     {(['light', 'dark', 'gold', 'neon'] as TextStyle[]).map(s => (
                       <button 
                         key={s} 
                         onClick={() => setState(p => ({ ...p, textStyle: s }))}
-                        className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all ${state.textStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}
+                        className={`flex-1 min-w-[80px] py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border-2 transition-all cursor-pointer ${state.textStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'}`}
                       >
                         {s}
                       </button>
@@ -998,7 +1002,7 @@ const App: React.FC = () => {
       <footer className="py-16 text-center">
         <div className="w-12 h-1 bg-slate-100 mx-auto mb-6 rounded-full"></div>
         <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.25em] opacity-80 flex items-center justify-center gap-2">
-          <span>AI Festival Studio v1.5.2 (Instagram Hub & PWA)</span>
+          <span>AI Festival Studio v1.6.1 (Security Hardened)</span>
           <span>•</span>
           <button
             onClick={() => setIsGuideOpen(true)}

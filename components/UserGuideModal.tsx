@@ -76,6 +76,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: 'Multilingual Greetings',
         desc: 'Switch the language at any time in the top-right menu to get native greetings in English, Chinese, Japanese, Korean, or German.'
+      },
+      {
+        icon: '🛡️',
+        title: 'Privacy Best Practice',
+        desc: 'When creating photo birthday cards, use nicknames or universal blessings instead of real full names to protect your personal privacy.'
       }
     ]
   },
@@ -95,9 +100,9 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
       },
       {
         num: '2',
-        icon: '🏮',
-        title: '挑選節日場合',
-        desc: '選擇農曆除夕團年飯、正月初一、人日、元宵節、白色情人節、排燈節或元旦新年等場合。'
+        icon: '🎂',
+        title: '挑選節日或生日場合',
+        desc: '選擇農曆新年、元宵節、浪漫情人節、中秋節，或全新推出的專屬「生日慶典」！'
       },
       {
         num: '3',
@@ -127,6 +132,11 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
         icon: '🌐',
         title: '多語言智能切換',
         desc: '右上角隨時切換語言，自動提供繁中、簡中、英文、日文、韓文與德文的應節祝詞。'
+      },
+      {
+        icon: '🛡️',
+        title: '相片賀卡私隱提醒',
+        desc: '製作相片生日卡時，強烈建議使用通用暱稱或祝福語，切勿輸入真實全名以防私隱洩漏。'
       }
     ]
   },
@@ -338,9 +348,31 @@ const GUIDE_LOCALIZATION: Record<Language, GuideContent> = {
 
 const CHANGELOG_ENTRIES = [
   {
-    version: 'v1.5.2',
+    version: 'v1.6.1',
     date: '2026-10-13',
     badge: 'Latest',
+    items: [
+      'Credential Security & Git Protection: Added firebase-applet-config.json to .gitignore and provided clean firebase-applet-config.example.json template without exposed keys.',
+      'Decoupled Gemini & Firebase Architecture: Gemini API key strictly isolated to server/environment variables (GEMINI_API_KEY) in AI Studio Secrets, completely separate from Firebase public web client parameters.',
+      'Dynamic Environment Configuration: Firebase loader dynamically reads VITE_FIREBASE_* environment variables with safe fallback to local files.',
+      'Secret Scanning Remediation: Verified client asset bundles to ensure zero raw secrets are hardcoded or leaked into client bundles.'
+    ]
+  },
+  {
+    version: 'v1.6.0',
+    date: '2026-10-13',
+    badge: 'Birthday AI',
+    items: [
+      'AI Birthday Card Studio: Added Birthday Celebration under festival categories with celebratory balloons, cakes, confetti, and ambient bokeh.',
+      'Photo-Aware Greeting Assistant (Gemini 3.8 Flash): Multimodal AI analyzes photo subjects (couples, family, elders, friends, pets) to recommend tailored, heartfelt greetings.',
+      'Automated Privacy Safeguards (Anti-Name Leak): Built-in real-time name detection warns users against entering full personal names alongside personal photos to safeguard privacy.',
+      '1-Tap Preset Application: Instantly apply AI recommended greeting presets with interactive pills and real-time canvas preview.'
+    ]
+  },
+  {
+    version: 'v1.5.2',
+    date: '2026-10-13',
+    badge: 'Instagram',
     items: [
       'Instagram Publishing Assistant: Dedicated in-app Instagram workflow that prevents desktop OS share dialog hijacking and guarantees instant access to Instagram sharing.',
       '1-Click Instagram Launch: Added direct launcher to instagram.com with automated card image download and formatted caption copying.',

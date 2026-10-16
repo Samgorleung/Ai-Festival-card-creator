@@ -485,6 +485,30 @@ export const FESTIVALS: Festival[] = [
     icon: '🎃',
     category: 'western',
     basePrompt: 'Spooky and enchanting Halloween night. Carved glowing Jack-o\'-lantern pumpkins, gothic silhouette architecture, floating candles, playful bats in the moonlight, misty autumn atmosphere with deep purple and warm orange tones.'
+  },
+  {
+    id: 'birthday',
+    nameEn: 'Birthday Celebration',
+    nameZh: '生日慶典',
+    nameSc: '生日庆典',
+    nameJa: 'お誕生日おめでとう',
+    nameKo: '생일 축하',
+    nameDe: 'Geburtstagsfeier',
+    dateEn: 'Year-Round',
+    dateZh: '每日專屬',
+    dateSc: '每日专属',
+    dateJa: '特別な日',
+    dateKo: '특별한 날',
+    dateDe: 'Das ganze Jahr',
+    greetingEn: 'Happy Birthday! Wishing you joy, health & prosperity ✨',
+    greetingZh: '生日快樂，歲歲平安，心想事成 🎂',
+    greetingSc: '生日快乐，岁岁平安，心想事成 🎂',
+    greetingJa: 'お誕生日おめでとうございます！素敵な一年を ✨',
+    greetingKo: '생일 축하해요! 늘 행복과 건강이 가득하길 🎂',
+    greetingDe: 'Herzlichen Glückwunsch zum Geburtstag! 🎂',
+    icon: '🎂',
+    category: 'lifestyle',
+    basePrompt: 'High-end luxury birthday celebration scene. Beautiful three-tier birthday cake with glowing warm candles, elegant floating metallic and pastel balloons, glittering confetti in the air, champagne flutes, wrapped gift boxes with silk ribbons, warm fairy bokeh ambient lighting, joyous and heartwarming festive atmosphere.'
   }
 ];
 
@@ -504,6 +528,7 @@ export const FESTIVAL_CATEGORIES: Record<string, 'eastern' | 'western' | 'lifest
   'halloween': 'western',
   'christmas': 'western',
   'st-george': 'western',
+  'birthday': 'lifestyle',
   'valentine': 'lifestyle',
   'white-valentine': 'lifestyle',
   'black-friday': 'lifestyle',
@@ -657,7 +682,14 @@ export const TRANSLATIONS = {
     shareModalSubtitle: 'Distribute your festive creations with deep links',
     copyCaption: 'Copy with Caption',
     socialShare: 'Distribute on Social Media',
-    shareSuccess: 'Share Link Ready!'
+    shareSuccess: 'Share Link Ready!',
+    birthdayFeatureBadge: 'Featured Occasion',
+    aiSuggestGreetingsBtn: '✨ AI Photo Greeting Assistant',
+    analyzingPhoto: 'AI is analyzing photo subjects & atmosphere...',
+    suggestedFor: 'AI Recommended for',
+    privacyWarning: '⚠️ Privacy Reminder: To prevent privacy leaks when pairing photos with greetings, avoid entering full personal names. Universal titles or generic blessings are recommended!',
+    privacyDetectedNotice: 'Full personal name detected. Consider using a nickname or generic greeting to protect privacy.',
+    quickGreetingOptions: 'Tap to apply AI greeting:',
   },
   [Language.ZH]: {
     title: 'AI 節日賀卡工坊',
@@ -728,7 +760,14 @@ export const TRANSLATIONS = {
     shareModalSubtitle: '分享專屬節日賀卡深層連結',
     copyCaption: '複製文案與連結',
     socialShare: '社群平台快速分享',
-    shareSuccess: '分享連結已就緒！'
+    shareSuccess: '分享連結已就緒！',
+    birthdayFeatureBadge: '特別場合',
+    aiSuggestGreetingsBtn: '✨ AI 分析相片推薦賀詞',
+    analyzingPhoto: 'AI 正在辨識相片人物與場景...',
+    suggestedFor: 'AI 智慧推薦給',
+    privacyWarning: '⚠️ 私隱提醒：製作帶相片的生日卡，請避免輸入真實全名以防私隱洩漏，建議使用通用暱稱或祝福語！',
+    privacyDetectedNotice: '檢測到可能包含真實全名，為保護私隱建議改用暱稱或通用祝福。',
+    quickGreetingOptions: '點擊立即套用推薦賀詞：',
   },
   [Language.SC]: {
     title: 'AI 节日贺卡工坊',
@@ -799,7 +838,14 @@ export const TRANSLATIONS = {
     shareModalSubtitle: '分享专属节日贺卡深层链接',
     copyCaption: '复制文案与链接',
     socialShare: '社交平台快速分享',
-    shareSuccess: '分享链接已就绪！'
+    shareSuccess: '分享链接已就绪！',
+    birthdayFeatureBadge: '特别场合',
+    aiSuggestGreetingsBtn: '✨ AI 分析相片推荐贺词',
+    analyzingPhoto: 'AI 正在识别相片人物与场景...',
+    suggestedFor: 'AI 智慧推荐给',
+    privacyWarning: '⚠️ 隐私提醒：制作带相片的生日卡，请避免输入真实全名以防隐私泄漏，建议使用通用昵称或祝福语！',
+    privacyDetectedNotice: '检测到可能包含真实全名，为保护隐私建议改用昵称或通用祝福。',
+    quickGreetingOptions: '点击立即套用推荐贺词：',
   },
   [Language.JA]: {
     title: 'AIフェスティバルスタジオ',
@@ -870,7 +916,14 @@ export const TRANSLATIONS = {
     shareModalSubtitle: 'ディープリンクでフェスティバル作品を共有',
     copyCaption: '文面付きでコピー',
     socialShare: 'ソーシャルメディアで共有',
-    shareSuccess: '共有リンクの準備完了！'
+    shareSuccess: '共有リンクの準備完了！',
+    birthdayFeatureBadge: '注目の行事',
+    aiSuggestGreetingsBtn: '✨ AI 写真祝福アシスタント',
+    analyzingPhoto: 'AIが写真の人物と雰囲気を分析中...',
+    suggestedFor: 'AIおすすめ対象',
+    privacyWarning: '⚠️ プライバシー注意：写真入り誕生日カードには本名を入力せず、ニックネームや一般的なお祝いメッセージをご利用ください。',
+    privacyDetectedNotice: '本名の可能性があるテキストを検出しました。プライバシー保護のため愛称のご利用をおすすめします。',
+    quickGreetingOptions: 'タップして適用：',
   },
   [Language.KO]: {
     title: 'AI 페스티벌 스튜디오',
@@ -941,7 +994,14 @@ export const TRANSLATIONS = {
     shareModalSubtitle: '딥 링크로 페스티벌 창작물 공유',
     copyCaption: '캡션과 함께 복사',
     socialShare: '소셜 미디어로 배포',
-    shareSuccess: '공유 링크 준비 완료!'
+    shareSuccess: '공유 링크 준비 완료!',
+    birthdayFeatureBadge: '특별한 행사',
+    aiSuggestGreetingsBtn: '✨ AI 사진 맞춤 축하문구 추천',
+    analyzingPhoto: 'AI가 사진의 인물과 분위기를 분석 중입니다...',
+    suggestedFor: 'AI 맞춤 추천',
+    privacyWarning: '⚠️ 개인정보 주의: 사진이 포함된 생일 카드에는 실명을 입력하지 말고 애칭이나 보편적인 축하 문구를 사용해 주세요.',
+    privacyDetectedNotice: '실명 가능성이 있는 이름이 감지되었습니다. 개인정보 보호를 위해 애칭 사용을 권장합니다.',
+    quickGreetingOptions: '터치하여 즉시 적용:',
   },
   [Language.DE]: {
     title: 'AI Festival Studio',
@@ -1012,6 +1072,13 @@ export const TRANSLATIONS = {
     shareModalSubtitle: 'Teile deine festlichen Kreationen mit Deep-Links',
     copyCaption: 'Mit Text & Link kopieren',
     socialShare: 'Auf Social Media teilen',
-    shareSuccess: 'Share-Link bereit!'
+    shareSuccess: 'Share-Link bereit!',
+    birthdayFeatureBadge: 'Besonderer Anlass',
+    aiSuggestGreetingsBtn: '✨ AI Foto-Grußtext Assistent',
+    analyzingPhoto: 'AI analysiert Personen und Stimmung...',
+    suggestedFor: 'AI Empfehlung für',
+    privacyWarning: '⚠️ Datenschutz-Hinweis: Verwenden Sie bei Fotokarten keine echten vollständigen Namen, um die Privatsphäre zu schützen.',
+    privacyDetectedNotice: 'Möglicher Name erkannt. Verwenden Sie stattdessen Kosenamen oder allgemeine Wünsche.',
+    quickGreetingOptions: 'Tippen zum Übernehmen:',
   }
 };

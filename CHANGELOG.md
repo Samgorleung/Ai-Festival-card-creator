@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.1] - 2026-10-13
+
+### Security & Hardening
+- **Git Credential Protection (`.gitignore`, `firebase-applet-config.example.json`)**:
+  - Added `firebase-applet-config.json` to `.gitignore` so local Firebase credentials and project parameters are never committed to GitHub or exposed in public repositories.
+  - Provided clean `firebase-applet-config.example.json` containing the schema structure with dummy tokens for open-source reference.
+- **Strict Decoupling of Gemini AI and Firebase Architecture**:
+  - Gemini AI model calls exclusively read from `process.env.GEMINI_API_KEY` / `import.meta.env.VITE_GEMINI_API_KEY` managed in AI Studio Secrets.
+  - Firebase Web Client parameters are strictly isolated to public client SDK parameters (`apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`, `firestoreDatabaseId`).
+- **Dynamic Environment Variable Loader (`services/firebase.ts`)**:
+  - Refactored Firebase initialization to prioritize `VITE_FIREBASE_*` environment variables over static local files, with seamless fallback for AI Studio development.
+- **Asset Hygiene & Key Rotation Workflow**:
+  - Verified Vite production build assets to ensure zero raw private keys or server secrets are embedded.
+  - Documented complete key rotation in Google Cloud Console and GitHub secret scanning alert remediation.
+
+---
+
+## [1.6.0] - 2026-10-13
+
+### Added
+- **AI Birthday Card Maker (`constants.ts`, `App.tsx`)**:
+  - Integrated a dedicated **Birthday Celebration (生日慶典 🎂)** occasion into the studio occasion directory under Lifestyle categories.
+  - Generates luxurious celebratory environments with three-tier birthday cakes, glowing candles, metallic and pastel floating balloons, celebratory confetti, champagne flutes, and warm bokeh fairy lighting.
+  - Highlighted with a featured occasion badge (`✨ 特有場合 / Featured`) in the occasion selector.
+
+- **Photo-Aware Greeting Assistant powered by Gemini 3.8 Flash (`services/gemini.ts`, `App.tsx`)**:
+  - Multimodal AI automatically analyzes uploaded or selfie photos to identify the depicted subjects and relationship context:
+    - **Couples / Romantic**: 感情日增, 歲歲相伴, 甜甜蜜蜜
+    - **Family & Children**: 家庭和順, 歲歲常歡愉, 平安喜樂
+    - **Elders & Seniors**: 福如東海, 身體健康, 龍馬精神, 松柏長青
+    - **Friends & Peers**: 青春常駐, 暴富暴美, 心想事成, 歡樂常在
+  - Provides 1-click interactive greeting pills allowing users to apply custom, tailored greetings in real time with immediate canvas synchronization.
+
+- **Automated Client-Side Privacy Safeguards (`services/gemini.ts`, `App.tsx`)**:
+  - Real-time client-side name detector (`checkGreetingPrivacy`) flags full personal Chinese or English names typed in the greeting box alongside personal photos.
+  - Displays high-visibility amber privacy warning dialogs with detected name chips advising users to use generic titles or nicknames to prevent personal data leakage.
+  - Proactive privacy notices embedded within the Birthday greeting overlay reminding users to avoid using full personal names.
+
+---
+
 ## [1.5.2] - 2026-10-13
 
 ### Fixed

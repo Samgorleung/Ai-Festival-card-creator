@@ -20,3 +20,4 @@ dist
 # API Keys and Secrets (CRITICAL)
 .env
 .env.production
+firebase-applet-config.json
